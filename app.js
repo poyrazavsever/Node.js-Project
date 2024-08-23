@@ -6,8 +6,13 @@ const adminRoutes = require("./routes/admin")
 const userRoutes = require("./routes/user")
 
 app.use(bodyParser.urlencoded({extended: false}));
+
 app.use('/admin',adminRoutes)
 app.use(userRoutes)
+
+app.use((req, res) => {
+    res.status(404).send('<h1>Sayfa Bulunamadı</h1>')
+})
 
 
 app.listen(3000, () => {

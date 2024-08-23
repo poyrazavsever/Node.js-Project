@@ -17,7 +17,7 @@ app.use(userRoutes)
 
 
 app.use((req, res) => {
-    res.render('404')
+    res.render('404', {title: 'Error | Not Found'})
 })
 
 app.listen(3000, () => {

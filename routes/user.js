@@ -5,7 +5,12 @@ const admin = require('./admin')
 
 router.get('/',(req, res, next) => {
 
-    res.render('index', {title: 'Ana Sayfa', products: admin.products})
+    res.render('index', 
+        {
+        title: 'Ana Sayfa', 
+        products: admin.products,
+        path: '/'
+    })
 })
 
 module.exports = router 

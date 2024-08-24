@@ -39,6 +39,7 @@ exports.getProductByCategoryId = (req, res, next) => {
         title: 'Ürünler', 
         products: products,
         categories: categories,
+        selectedCategory: categoryId,
         path: '/products'
     })
 }

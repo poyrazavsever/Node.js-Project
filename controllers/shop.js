@@ -28,6 +28,22 @@ exports.getProducts = (req, res, next) => {
     })
 }
 
+exports.getProductByCategoryId = (req, res, next) => {
+
+    const categoryId = req.params.categoryId
+    const products = Product.getProductsByCategoryId(categoryId);
+    const categories = Category.getAll();
+
+    res.render('shop/products', 
+        {
+        title: 'Ürünler', 
+        products: products,
+        categories: categories,
+        path: '/products'
+    })
+}
+
+
 exports.getProduct = (req, res, next) => {
 
     const product = Product.getById(req.params.productId)

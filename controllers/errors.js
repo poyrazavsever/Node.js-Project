@@ -1,3 +1,3 @@
 module.exports.get404Page = (req, res) => {
-    res.render('404', {title: 'Error | Not Found'})
+    res.render('errors/404', {title: 'Error | Not Found'})
 }

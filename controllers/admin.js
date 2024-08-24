@@ -32,10 +32,27 @@ exports.postAddProduct = (req, res, next) => {
 
 
 exports.getEditProduct =  (req, res, next) => { 
-    res.render('admin/edit-product', {title: 'Edit Product', path:'/admin/edit-product'})
+
+    const product = Product.getById(req.params.productId)
+
+    res.render('admin/edit-product', {
+        title: `Edit ${product.name}`, 
+        path:'/admin/products',
+        product: product
+    });
+
 } 
 
 
 exports.postEditProduct = (req, res, next) => {
-    res.redirect('/')
+    const product = Product.getById(req.body.id);
+
+    product.name = req.body.name
+    product.price = req.body.price
+    product.imageUrl = req.body.imageUrl
+    product.description = req.body.description
+
+    Product.Update(product);
+
+    res.redirect('/admin/products')
 } 

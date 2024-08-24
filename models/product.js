@@ -8,12 +8,13 @@ const products = [
 
 module.exports = class Product {
 
-    constructor(name, price, imageUrl, description) {
+    constructor(name, price, imageUrl, description, categoryId) {
         this.id = (Math.floor(Math.random()*99999) + 1).toString();
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.description = description
+        this.categoryId = categoryId
 
     }
 
@@ -40,6 +41,7 @@ module.exports = class Product {
         products[index].price = product.price;
         products[index].imageUrl = product.imageUrl;
         products[index].description = product.description;
+        products[index].categoryId = product.categoryId;
     }
 
     static DeleteById(id) {

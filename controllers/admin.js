@@ -1,4 +1,5 @@
 const Product = require('../models/product')
+const Category = require('../models/category')
 
 exports.getProducts = (req, res, next) => {
 
@@ -15,16 +16,19 @@ exports.getProducts = (req, res, next) => {
 
 
 exports.getAddProducts =  (req, res, next) => { 
-    res.render('admin/add-product', {title: 'Add Product', path:'/admin/add-product'})
+    const categories = Category.getAll();
+    res.render('admin/add-product', {title: 'Add Product', path:'/admin/add-product', categories:categories})
 } 
 
 
 exports.postAddProduct = (req, res, next) => {
-    const product = new Product(
-        req.body.name,
-        req.body.price, 
-        req.body.imageUrl, 
-        req.body.description);
+    const product = new Product();
+
+    product.name = req.body.name
+    product.price = req.body.price
+    product.imageUrl = req.body.imageUrl
+    product.description = req.body.description
+    product.categoryId = req.body.categoryId
     
     product.saveProduct();
 
@@ -35,11 +39,13 @@ exports.postAddProduct = (req, res, next) => {
 exports.getEditProduct =  (req, res, next) => { 
 
     const product = Product.getById(req.params.productId)
+    const categories = Category.getAll();
 
     res.render('admin/edit-product', {
         title: `Edit ${product.name}`, 
         path:'/admin/products',
-        product: product
+        product: product,
+        categories:categories
     });
 
 } 
@@ -52,6 +58,7 @@ exports.postEditProduct = (req, res, next) => {
     product.price = req.body.price
     product.imageUrl = req.body.imageUrl
     product.description = req.body.description
+    product.categoryId = req.body.categoryId
 
     Product.Update(product);
 

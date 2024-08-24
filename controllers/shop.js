@@ -24,6 +24,14 @@ exports.getProducts = (req, res, next) => {
     })
 }
 
+exports.getProduct = (req, res, next) => {
+
+    const productId = req.params.productId
+    console.log(Product.getById(productId))
+    
+    
+}
+
 exports.getProductDetails = (req, res, next) => {
 
     res.render('shop/details', 

@@ -23,4 +23,9 @@ module.exports = class Product {
         return products
     }
 
+    static getById(id) {
+        const product = products.find(i =>i.id === id)
+        return product
+    }
+
 }

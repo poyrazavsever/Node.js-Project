@@ -1,0 +1,15 @@
+extends ../layouts/main-layout.pug
+
+block content
+    .row 
+        .col-md-4 
+            img(src=`/img/${product.imageUrl}` alt=`${product.name} left`).img-fluid
+
+        .col-md-8.pl-4
+            h3 #{product.name}
+            hr
+            p #{product.description}
+            p price: #{product.price}
+            button(type='submit').btn.btn-secondary.btn-lg Add to Cart
+
+

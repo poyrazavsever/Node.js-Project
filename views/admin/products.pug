@@ -4,6 +4,9 @@ block content
 
     if(action !== 'undefined' && action === 'edit')
         .alert.alert-success The Product has been updated
+
+    if(action !== 'undefined' && action === 'delete')
+        .alert.alert-danger The Product has been deleted 
     
  
     if products.length > 0
@@ -23,6 +26,10 @@ block content
                         td #{product.price} TL
                         td    
                             a.btn.btn-primary.btn-sm(href=`/admin/products/${product.id}`) Edit
+
+                            form(action='/admin/delete-product' method='POST').pl-2
+                                input(type='hidden' name='productId' value=`${product.id}`)
+                                button(type='submit').btn.btn-danger.btn-sm Delete
     else 
         h1 No Products
                               

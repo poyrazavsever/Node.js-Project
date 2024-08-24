@@ -3,6 +3,8 @@ const app = express();
 const bodyParser = require('body-parser')
 const path = require('path');
 
+const errorController = require('./controllers/errors')
+
 app.set('view engine', 'pug')
 app.set('views', './views')
 
@@ -16,9 +18,7 @@ app.use('/admin', adminRoutes)
 app.use(userRoutes)
 
 
-app.use((req, res) => {
-    res.render('404', {title: 'Error | Not Found'})
-})
+app.use(errorController.get404Page)
 
 app.listen(3000, () => {
     console.log("listening on port 3000")

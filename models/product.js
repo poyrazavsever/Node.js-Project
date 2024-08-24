@@ -1,12 +1,13 @@
 const products = [
-    {name:'Samsung S6', price:2000, imageUrl:'2.jpg', description: 'İyi telefon'},
-    {name:'Samsung S4', price:3000, imageUrl:'1.jpg', description: 'Kötü telefon'},
-    {name:'Aplle S6', price:1000, imageUrl:'4.jpg', description: 'Çok iyi telefon'},
+    {id:'12123',name:'Samsung S6', price:2000, imageUrl:'2.jpg', description: 'İyi telefon'},
+    {id:'12124',name:'Samsung S4', price:3000, imageUrl:'1.jpg', description: 'Kötü telefon'},
+    {id:'12125',name:'Aplle S6', price:1000, imageUrl:'4.jpg', description: 'Çok iyi telefon'},
 ];
 
 module.exports = class Product {
 
     constructor(name, price, imageUrl, description) {
+        this.id = Math.floor(Math.random()*99999)+1;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;

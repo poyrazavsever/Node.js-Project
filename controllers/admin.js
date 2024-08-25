@@ -36,9 +36,13 @@ exports.postAddProduct = (req, res, next) => {
     product.description = req.body.description
     product.categoryId = req.body.categoryId
     
-    product.saveProduct();
+    product.saveProduct().then(() => {
+        res.redirect('/')
+   
+    }).catch(err => {
+        console.log(err)
+    });
 
-    res.redirect('/')
 } 
 
 

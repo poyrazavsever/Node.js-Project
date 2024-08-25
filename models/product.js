@@ -13,7 +13,7 @@ module.exports = class Product {
     }
 
     saveProduct() {
-        connection.execute('INSERT INTO products (name, price, imageUrl, description) VALUES (?, ?, ?, ?)', [this.name, this.price, this.imageUrl, this.description])
+        return connection.execute('INSERT INTO products (name, price, imageUrl, description) VALUES (?, ?, ?, ?)', [this.name, this.price, this.imageUrl, this.description])
     }
 
     static getAll() {

@@ -44,14 +44,17 @@ exports.postAddProduct = (req, res, next) => {
 
 exports.getEditProduct =  (req, res, next) => { 
 
-    const product = Product.getById(req.params.productId)
     const categories = Category.getAll();
-
-    res.render('admin/edit-product', {
-        title: `Edit ${product.name}`, 
-        path:'/admin/products',
-        product: product,
-        categories:categories
+    Product.getById(req.params.productId)
+    .then((product) => {
+        res.render('admin/edit-product', {
+            title: `Edit ${product[0][0].name}`, 
+            path:'/admin/products',
+            product: product[0][0],
+            categories:categories
+        });
+    }).catch(err => {
+        console.log(err)
     });
 
 } 

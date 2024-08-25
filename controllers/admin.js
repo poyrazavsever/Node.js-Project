@@ -65,17 +65,22 @@ exports.getEditProduct =  (req, res, next) => {
 
 
 exports.postEditProduct = (req, res, next) => {
+
     const product = Product.getById(req.body.id);
 
+    product.id = req.body.id
     product.name = req.body.name
     product.price = req.body.price
     product.imageUrl = req.body.imageUrl
     product.description = req.body.description
     product.categoryId = req.body.categoryId
 
-    Product.Update(product);
+    Product.Update(product).then(() => {
+        res.redirect('/admin/products?action=edit')
+    }).catch(err => {
+        console.log(err)
+    });
 
-    res.redirect('/admin/products?action=edit')
 } 
 
 exports.postDeleteProduct = (req, res, next) => {

@@ -28,6 +28,7 @@ module.exports = class Product {
     }
 
     static Update(product) {
+        return connection.execute('UPDATE products SET products.name=?, products.price=?, products.imageUrl=?, products.description=? WHERE products.id=?', [product.name, product.price, product.imageUrl, product.description, product.id])
     }
 
     static DeleteById(id) {

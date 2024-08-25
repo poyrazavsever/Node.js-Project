@@ -2,30 +2,42 @@ const Product = require('../models/product')
 const Category = require("../models/category")
 exports.getIndex = (req, res, next) => {
 
-    const products = Product.getAll();
     const categories = Category.getAll();
 
-    res.render('shop/index', 
-        {
-        title: 'Alışveriş', 
-        products: products,
-        categories: categories,
-        path: '/'
-    })
+    Product.getAll()
+        .then(products => {
+            res.render('shop/index', 
+                {
+                title: 'Alışveriş', 
+                products: products[0],
+                categories: categories,
+                path: '/'
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
+
+    
 }
 
 exports.getProducts = (req, res, next) => {
 
-    const products = Product.getAll();
     const categories = Category.getAll();
 
-    res.render('shop/products', 
-        {
-        title: 'Ürünler', 
-        products: products,
-        categories: categories,
-        path: '/products'
-    })
+    Product.getAll()
+        .then(products => {
+            res.render('shop/products', 
+                {
+                title: 'Alışveriş', 
+                products: products[0],
+                categories: categories,
+                path: '/products'
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
 }
 
 exports.getProductByCategoryId = (req, res, next) => {
@@ -47,25 +59,19 @@ exports.getProductByCategoryId = (req, res, next) => {
 
 exports.getProduct = (req, res, next) => {
 
-    const product = Product.getById(req.params.productId)
-
-    res.render('shop/product-detail', {
-        title:`${product.name} Detail`, 
-        product:product, 
-        path:'/products'
-    });
-    
+    Product.getById(req.params.productId)
+        .then((product) => {
+            res.render('shop/product-detail', {
+                title: product[0][0].name, 
+                product: product[0][0], 
+                path: '/products'
+            });
+        }).catch(err => {
+            console.log(err)
+        })
     
 }
 
-exports.getProductDetails = (req, res, next) => {
-
-    res.render('shop/details', 
-        {
-        title: 'Detay', 
-        path: '/details'
-    })
-}
 
 
 exports.getCart = (req, res, next) => {

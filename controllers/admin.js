@@ -5,13 +5,19 @@ exports.getProducts = (req, res, next) => {
 
     const products = Product.getAll();
 
-    res.render('admin/products', 
-        {
-        title: 'Admin Products', 
-        products: products,
-        path: '/admin/products',
-        action: req.query.action
-    })
+    Product.getAll()
+        .then(products => {
+            res.render('admin/products', 
+                {
+                title: 'Admin Ürünler', 
+                products: products[0],
+                path: '/admin/products',
+                action: req.query.action
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
 }
 
 

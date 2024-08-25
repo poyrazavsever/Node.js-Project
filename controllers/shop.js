@@ -50,20 +50,25 @@ exports.getProducts = (req, res, next) => {
 exports.getProductByCategoryId = (req, res, next) => {
 
     const categoryId = req.params.categoryId
-    const products = Product.getProductsByCategoryId(categoryId);
-    Category.getAll().then(categories => {
-        res.render('shop/products', {
-            title: 'Ürünler',
-            products: products,
-            categories: categories[0],
-            selectedCategory: categoryId,
-            path: '/products'
-        })
-    }).catch(err => {
-        console.log(err)
-    });
 
-    
+    Product.getProductsByCategoryId(req.params.categoryId)
+        .then(products => {
+            console.log(products[0])
+            Category.getAll().then(categories => {
+                res.render('shop/products', {
+                    title: 'Ürünler',
+                    products: products[0],
+                    categories: categories[0],
+                    selectedCategory: categoryId,
+                    path: '/products'
+                })
+            }).catch(err => {
+                console.log(err)
+            });
+        }).catch(err => console.log(err));
+
+
+
 }
 
 

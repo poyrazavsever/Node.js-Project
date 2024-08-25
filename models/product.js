@@ -25,6 +25,7 @@ module.exports = class Product {
     }
 
     static getProductsByCategoryId(categoryId){
+        return connection.execute('SELECT * FROM products WHERE products.categoryId=?', [categoryId])
     }
 
     static Update(product) {

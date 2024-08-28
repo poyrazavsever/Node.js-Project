@@ -6,6 +6,7 @@ const bodyParser = require('body-parser')
 const path = require('path');
 
 const errorController = require('./controllers/errors')
+const sequelize = require('./utility/database');
 
 app.set('view engine', 'pug')
 app.set('views', './views')
@@ -20,6 +21,13 @@ app.use('/admin', adminRoutes)
 app.use(userRoutes)
 
 app.use(errorController.get404Page)
+
+sequelize.sync()
+    .then(result => {
+        console.log(result)
+    }).catch(err => {
+        console.log(err)
+    });
 
 app.listen(3000, () => {
     console.log("listening on port 3000")

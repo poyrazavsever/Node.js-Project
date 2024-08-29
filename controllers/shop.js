@@ -2,14 +2,14 @@ const Product = require('../models/product')
 const Category = require("../models/category")
 exports.getIndex = (req, res, next) => {
 
-    Category.getAll()
+    Category.findAll()
         .then(categories => {
-            Product.getAll()
+            Product.findAll()
                 .then(products => {
                     res.render('shop/index', {
                         title: 'Alışveriş',
-                        products: products[0],
-                        categories: categories[0],
+                        products: products,
+                        categories: categories,
                         path: '/'
                     })
                 })
@@ -27,19 +27,20 @@ exports.getIndex = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
 
-    Category.getAll().then(categories => {
-        Product.getAll()
-            .then(products => {
-                res.render('shop/products', {
-                    title: 'Alışveriş',
-                    products: products[0],
-                    categories: categories[0],
-                    path: '/products'
+    Category.findAll()
+        .then(categories => {
+            Product.findAll()
+                .then(products => {
+                    res.render('shop/products', {
+                        title: 'Alışveriş',
+                        products: products,
+                        categories: categories,
+                        path: '/products'
+                    })
                 })
-            })
-            .catch(err => {
-                console.log(err)
-            })
+                .catch(err => {
+                    console.log(err)
+                })
     }).catch(err => {
         console.log(err)
     })
@@ -54,7 +55,7 @@ exports.getProductByCategoryId = (req, res, next) => {
     Product.getProductsByCategoryId(req.params.categoryId)
         .then(products => {
             console.log(products[0])
-            Category.getAll().then(categories => {
+            Category.findAll().then(categories => {
                 res.render('shop/products', {
                     title: 'Ürünler',
                     products: products[0],

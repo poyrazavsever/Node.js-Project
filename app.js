@@ -25,17 +25,24 @@ app.use(userRoutes)
 
 app.use(errorController.get404Page)
 
-Product.belongsTo(Category, {
-    foreignKey : {
-        allowNull : false
-    }
-});
+Product.belongsTo(Category, {foreignKey : {allowNull : false}});
 Category.hasMany(Product);
 
 sequelize
-    .sync({force : true})
+    .sync()
     .then(result => {
-        console.log(result)
+
+        Category.count()
+            .then(count => {
+                if(count===0){
+                    Category.bulkCreate([
+                        {name: 'Telefon', description:'Telefon Kategorisi'},
+                        {name: 'Bilgisayar', description:'Bilgisayar Kategorisi'},
+                        {name: 'Elektrnoik', description:'Elektrnoik Kategorisi'},
+                    ]);
+                }
+            })
+        
     }).catch(err => {
         console.log(err)
     });

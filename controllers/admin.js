@@ -21,10 +21,16 @@ exports.getProducts = (req, res, next) => {
 
 
 exports.getAddProducts = (req, res, next) => {
-    res.render('admin/add-product', {
-        title: 'Add Product',
-        path: '/admin/add-product',
-    });
+    Category.findAll()
+        .then(categories => {
+            res.render('admin/add-product', {
+                title: 'Add Product',
+                path: '/admin/add-product',
+                categories: categories
+            });
+        })
+        .catch(err => console.log(err))
+    
 
 }
 
@@ -35,34 +41,20 @@ exports.postAddProduct = (req, res, next) => {
     const price = req.body.price
     const imageUrl = req.body.imageUrl
     const description = req.body.description
-    // const categoryId = req.body.categoryId
+    const categoryId = req.body.categoryId
 
-    // Product.create({
-    //     name: name,
-    //     price: price,
-    //     imageUrl: imageUrl,
-    //     description: description
-    // }).then(result => {
-    //     console.log(result)
-    //     res.redirect('/')
-    // }).catch(err => {
-    //     console.log(err)
-    // })
-
-    const prd = Product.build({
+    Product.create({
         name: name,
         price: price,
         imageUrl: imageUrl,
-        description: description
+        description: description,
+        categoryId: categoryId,
+    }).then(result => {
+        res.redirect('/')
+    }).catch(err => {
+        console.log(err)
     })
 
-    prd.save()
-        .then(result => {
-            console.log(result)
-            res.redirect('/')
-        }).catch(err => {
-            console.log(err)
-        })
 
 }
 
@@ -107,6 +99,7 @@ exports.postEditProduct = (req, res, next) => {
             product.price = price
             product.imageUrl = imageUrl
             product.description = description
+            product.categoryId = categoryId
             return product.save()
         })
         .then(result => {
@@ -121,7 +114,11 @@ exports.postDeleteProduct = (req, res, next) => {
 
     const id = req.body.productId
 
-    Product.destroy({where:{id: id}})
+    Product.destroy({
+            where: {
+                id: id
+            }
+        })
         .then(() => {
             res.redirect('/admin/products?action=delete')
         }).catch(err => console.log(err));

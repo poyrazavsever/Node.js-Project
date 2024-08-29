@@ -56,22 +56,38 @@ exports.getProducts = (req, res, next) => {
 exports.getProductByCategoryId = (req, res, next) => {
 
     const categoryId = req.params.categoryId
+    const model = []
 
-    Product.getProductsByCategoryId(req.params.categoryId)
+    // Product.findAll({where: {categoryId: categoryId}})
+    //     .then(products => {
+    //         Category.findAll().then(categories => {
+    //             res.render('shop/products', {
+    //                 title: 'Ürünler',
+    //                 products: products,
+    //                 categories: categories,
+    //                 selectedCategory: categoryId,
+    //                 path: '/products'
+    //             })
+    //         }).catch(err => {
+    //             console.log(err)
+    //         });
+    //     }).catch(err => console.log(err));
+
+    Category.findAll()
+        .then(categories => {
+            model.categories = categories
+            const category = categories.find(i => i.id === categoryId);
+            return category.getProducts()
+        })
         .then(products => {
-            console.log(products[0])
-            Category.findAll().then(categories => {
-                res.render('shop/products', {
-                    title: 'Ürünler',
-                    products: products[0],
-                    categories: categories[0],
-                    selectedCategory: categoryId,
-                    path: '/products'
-                })
-            }).catch(err => {
-                console.log(err)
-            });
-        }).catch(err => console.log(err));
+            res.render('shop/products', {
+                title: 'Ürünler',
+                products: products,
+                categories: model.categories,
+                selectedCategory: categoryId,
+                path: '/products'
+            })                
+        }).catch(err => console.log(err))
 
 
 

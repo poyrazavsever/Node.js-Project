@@ -75,19 +75,22 @@ exports.getProductByCategoryId = (req, res, next) => {
 
     Category.findAll()
         .then(categories => {
-            model.categories = categories
-            const category = categories.find(i => i.id === categoryId);
-            return category.getProducts()
+            model.categories = categories;
+            const category = categories.find(i => i.id == categoryId);
+            return category.getProducts();
         })
         .then(products => {
             res.render('shop/products', {
-                title: 'Ürünler',
+                title: 'Products',
                 products: products,
                 categories: model.categories,
                 selectedCategory: categoryId,
                 path: '/products'
-            })                
-        }).catch(err => console.log(err))
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+        })
 
 
 

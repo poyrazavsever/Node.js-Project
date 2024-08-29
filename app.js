@@ -8,6 +8,9 @@ const path = require('path');
 const errorController = require('./controllers/errors')
 const sequelize = require('./utility/database');
 
+const Category = require('./models/category')
+const Product = require('./models/product')
+
 app.set('view engine', 'pug')
 app.set('views', './views')
 
@@ -22,7 +25,15 @@ app.use(userRoutes)
 
 app.use(errorController.get404Page)
 
-sequelize.sync()
+Product.belongsTo(Category, {
+    foreignKey : {
+        allowNull : false
+    }
+});
+Category.hasMany(Product);
+
+sequelize
+    .sync({force : true})
     .then(result => {
         console.log(result)
     }).catch(err => {

@@ -1,4 +1,3 @@
-
 const express = require('express');
 const app = express();
 
@@ -10,6 +9,7 @@ const sequelize = require('./utility/database');
 
 const Category = require('./models/category')
 const Product = require('./models/product')
+const User = require('./models/user')
 
 app.set('view engine', 'pug')
 app.set('views', './views')
@@ -17,7 +17,9 @@ app.set('views', './views')
 const adminRoutes = require("./routes/admin")
 const userRoutes = require("./routes/shop")
 
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 app.use(express.static(path.join(__dirname, "/public")))
 
 app.use('/admin', adminRoutes)
@@ -25,24 +27,54 @@ app.use(userRoutes)
 
 app.use(errorController.get404Page)
 
-Product.belongsTo(Category, {foreignKey : {allowNull : false}});
+Product.belongsTo(Category, {
+    foreignKey: { 
+        allowNull: false
+    }
+});
 Category.hasMany(Product);
 
+Product.belongsTo(User);
+User.hasMany(Product);
+
 sequelize
-    .sync()
+    .sync({force:true})
+    // .sync()
     .then(result => {
 
-        Category.count()
-            .then(count => {
-                if(count===0){
-                    Category.bulkCreate([
-                        {name: 'Telefon', description:'Telefon Kategorisi'},
-                        {name: 'Bilgisayar', description:'Bilgisayar Kategorisi'},
-                        {name: 'Elektrnoik', description:'Elektrnoik Kategorisi'},
-                    ]);
+        User.findByPk(1)
+            .then(user => {
+                if (!user) {
+                    User.create({
+                        name: 'Poyraz',
+                        email: 'email@email.com'
+                    })
+                } else {
+                    return user
                 }
+            }).then(user => {
+                Category.count()
+                    .then(count => {
+                        if (count === 0) {
+                            Category.bulkCreate([{
+                                    name: 'Telefon',
+                                    description: 'Telefon Kategorisi'
+                                },
+                                {
+                                    name: 'Bilgisayar',
+                                    description: 'Bilgisayar Kategorisi'
+                                },
+                                {
+                                    name: 'Elektrnoik',
+                                    description: 'Elektrnoik Kategorisi'
+                                },
+                            ]);
+                        }
+                    })
             })
-        
+
+
+
     }).catch(err => {
         console.log(err)
     });

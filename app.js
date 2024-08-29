@@ -22,6 +22,15 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(express.static(path.join(__dirname, "/public")))
 
+app.use((req, res, next) => {
+    User.findByPk(1)
+        .then(user => {
+            req.user = user;
+            next();
+        })
+        .catch(err => console.log(err))
+})
+
 app.use('/admin', adminRoutes)
 app.use(userRoutes)
 
@@ -38,20 +47,20 @@ Product.belongsTo(User);
 User.hasMany(Product);
 
 sequelize
-    .sync({force:true})
-    // .sync()
+    // .sync({force:true})
+    .sync()
     .then(result => {
 
         User.findByPk(1)
             .then(user => {
                 if (!user) {
-                    User.create({
+                    return User.create({
                         name: 'Poyraz',
                         email: 'email@email.com'
                     })
-                } else {
-                    return user
                 }
+                return user
+                
             }).then(user => {
                 Category.count()
                     .then(count => {

@@ -4,8 +4,8 @@ const Category = require('../models/category')
 exports.getProducts = (req, res, next) => {
 
     Product.findAll({
-        attributes: ['id', 'name', 'price', 'imageUrl']
-    })
+            attributes: ['id', 'name', 'price', 'imageUrl']
+        })
         .then(products => {
             res.render('admin/products', {
                 title: 'Admin Ürünler',
@@ -71,6 +71,9 @@ exports.getEditProduct = (req, res, next) => {
 
     Product.findByPk(req.params.productId)
         .then((product) => {
+            if (!product) {
+                return res.redirect('/')
+            }
             Category.findAll()
                 .then(categories => {
                     res.render('admin/edit-product', {
@@ -91,20 +94,26 @@ exports.getEditProduct = (req, res, next) => {
 
 exports.postEditProduct = (req, res, next) => {
 
-    const product = Product.findByPk(req.body.id);
+    const id = req.body.id
+    const name = req.body.name
+    const price = req.body.price
+    const imageUrl = req.body.imageUrl
+    const description = req.body.description
+    const categoryId = req.body.categoryId
 
-    product.id = req.body.id
-    product.name = req.body.name
-    product.price = req.body.price
-    product.imageUrl = req.body.imageUrl
-    product.description = req.body.description
-    product.categoryId = req.body.categoryId
-
-    Product.Update(product).then(() => {
-        res.redirect('/admin/products?action=edit')
-    }).catch(err => {
-        console.log(err)
-    });
+    Product.findByPk(id)
+        .then(product => {
+            product.name = name
+            product.price = price
+            product.imageUrl = imageUrl
+            product.description = description
+            return product.save()
+        })
+        .then(result => {
+            console.log('updated')
+            res.redirect('/admin/products?action=edit')
+        })
+        .catch(err => console.log(err))
 
 }
 

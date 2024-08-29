@@ -3,7 +3,9 @@ const Category = require('../models/category')
 
 exports.getProducts = (req, res, next) => {
 
-    Product.findAll()
+    Product.findAll({
+        attributes: ['id', 'name', 'price', 'imageUrl']
+    })
         .then(products => {
             res.render('admin/products', {
                 title: 'Admin Ürünler',
@@ -67,15 +69,15 @@ exports.postAddProduct = (req, res, next) => {
 
 exports.getEditProduct = (req, res, next) => {
 
-    Product.getById(req.params.productId)
+    Product.findByPk(req.params.productId)
         .then((product) => {
-            Category.getAll()
+            Category.findAll()
                 .then(categories => {
                     res.render('admin/edit-product', {
-                        title: `Edit ${product[0][0].name}`,
+                        title: `Edit ${product.name}`,
                         path: '/admin/products',
-                        product: product[0][0],
-                        categories: categories[0]
+                        product: product,
+                        categories: categories
                     });
                 })
                 .catch(err => console.log(err))
@@ -89,7 +91,7 @@ exports.getEditProduct = (req, res, next) => {
 
 exports.postEditProduct = (req, res, next) => {
 
-    const product = Product.getById(req.body.id);
+    const product = Product.findByPk(req.body.id);
 
     product.id = req.body.id
     product.name = req.body.name

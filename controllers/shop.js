@@ -4,7 +4,10 @@ exports.getIndex = (req, res, next) => {
 
     Category.findAll()
         .then(categories => {
-            Product.findAll()
+            Product.findAll(
+                {
+                    attributes: ['id', 'name', 'price', 'imageUrl', 'description']
+                })
                 .then(products => {
                     res.render('shop/index', {
                         title: 'Alışveriş',
@@ -29,7 +32,9 @@ exports.getProducts = (req, res, next) => {
 
     Category.findAll()
         .then(categories => {
-            Product.findAll()
+            Product.findAll({
+                attributes: ['id', 'name', 'price', 'imageUrl', 'description']
+            })
                 .then(products => {
                     res.render('shop/products', {
                         title: 'Alışveriş',
@@ -75,11 +80,13 @@ exports.getProductByCategoryId = (req, res, next) => {
 
 exports.getProduct = (req, res, next) => {
 
-    Product.getById(req.params.productId)
+    Product.findByPk(req.params.productId, {
+        attributes: ['id', 'name', 'price', 'imageUrl', 'description']
+    })
         .then((product) => {
             res.render('shop/product-detail', {
-                title: product[0][0].name,
-                product: product[0][0],
+                title: product.name,
+                product: product,
                 path: '/products'
             });
         }).catch(err => {

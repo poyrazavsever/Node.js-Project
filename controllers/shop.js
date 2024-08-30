@@ -180,6 +180,8 @@ exports.postCart = (req, res, next) => {
         });
 }
 
+
+
 exports.postCartItemDelete = (req, res, next) => {
 
     const productId = req.body.productId
@@ -208,4 +210,36 @@ exports.getOrders = (req, res, next) => {
         title: 'Orders',
         path: '/orders'
     })
+}
+
+exports.postOrder = (req, res, next) => {
+    let userCart;
+    req.user
+        .getCart()
+        .then(cart => {
+            userCart = cart;
+            return cart.getProducts();
+        })
+        .then(products => {
+            return req.user.createOrder()
+                .then(order => {
+                    order.addProducts(products.map(product => {
+                        product.orderItem = {
+                            quantity: product.cartItem.quantity,
+                            price: product.price
+                        }
+                        return product;
+                    }));
+                })
+                .catch(err => { console.log(err); });
+        })
+        .then(() => {
+            userCart.setProducts(null);
+        })
+        .then(() => {
+            res.redirect('/orders');
+        })
+        .catch(err => {
+            console.log(err);
+        });
 }

@@ -13,6 +13,8 @@ router.get('/categories/:categoryId', shopsController.getProductByCategoryId);
 
 router.get('/cart', shopsController.getCart);
 
+router.post('/cart', shopsController.postCart);
+
 router.get('/orders', shopsController.getOrders);
 
 

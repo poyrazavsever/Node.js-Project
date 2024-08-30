@@ -1,5 +1,6 @@
 const Product = require('../models/product')
-const Category = require("../models/category")
+const Category = require("../models/category");
+
 exports.getIndex = (req, res, next) => {
 
     Category.findAll()
@@ -177,6 +178,28 @@ exports.postCart = (req, res, next) => {
         .catch(err => {
             console.log(err);
         });
+}
+
+exports.postCartItemDelete = (req, res, next) => {
+
+    const productId = req.body.productId
+
+    req.user
+        .getCart()
+        .then(cart => {
+            return cart.getProducts({where : {id : productId}})
+        })
+        .then(products => {
+            const product = products[0]
+
+            if(product){
+                return product.cartItem.destroy()
+            }
+        })
+        .then(() => {
+            res.redirect('/cart?action=delete')
+        })
+        .catch(err => console.log(err))
 }
 
 exports.getOrders = (req, res, next) => {

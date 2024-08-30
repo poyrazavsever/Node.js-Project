@@ -205,11 +205,10 @@ exports.postCartItemDelete = (req, res, next) => {
 }
 
 exports.getOrders = (req, res, next) => {
-
     res.render('shop/orders', {
         title: 'Orders',
         path: '/orders'
-    })
+    });
 }
 
 exports.postOrder = (req, res, next) => {
